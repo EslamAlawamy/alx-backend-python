@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" the clinet module """
+""" the client module """
 import unittest
 from unittest.mock import PropertyMock, patch
 from client import GithubOrgClient
@@ -9,7 +9,7 @@ from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """ test GithubOrgClient """
+    """ test GithubOrgClient class """
 
     @parameterized.expand(
         [
@@ -20,7 +20,7 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch("client.get_json")
     def test_org(self, org_name, output, mock_get_json):
         """
-        test if GithubOrgClient.org
+        test that GithubOrgClient.org
         returns the correct value
         """
         test_init = GithubOrgClient(org_name)
@@ -31,7 +31,7 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch("client.get_json")
     def test_public_repos_url(self, mock_get_json):
         """
-        test client.get_json func to
+        test client.get_json to
         check the _public_repos_url behavior
         """
         test_init = GithubOrgClient("test")
@@ -45,7 +45,7 @@ class TestGithubOrgClient(unittest.TestCase):
         new_callable=PropertyMock,
     )
     def test_public_repos(self, mock_public_repos_url, mock_get_json):
-        """ test public_repos func using PropertyMock """
+        """ test public_repos using PropertyMock """
         test_instance = GithubOrgClient("test")
         mock_public_repos_url.return_value = "www.test.com"
         repos_list = {"repos": ["r1", "r2", "r3", "...etc"]}
@@ -60,18 +60,26 @@ class TestGithubOrgClient(unittest.TestCase):
         ]
     )
     def test_has_license(self, repo, license_key, output):
-        """ test has_license func """
+        """ test has_license """
         has_license = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(has_license, output)
 
 
 class TestIntegrationGithubOrgClient(unittest.TestCase):
-    """ the Integration test for GithubOrgClient """
+    """
+    Integration test for GithubOrgClient
+    """
+
     class setUpClass:
-        """ Set up class for the integration test """
+        """
+        Set up class for the integration test
+        """
+
         @patch("client.get_json")
         def setUp(self, mock_get_json):
-            """ Set up the method for class """
+            """
+            Set up the method for class
+            """
             self.test_class = GithubOrgClient("test")
             self.org_payload = {"repos_url": "www.test.com"}
             self.repos_payload = [
@@ -90,11 +98,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     TEST_PAYLOAD
 )
 class TestIntegrationGithubOrgClient(unittest.TestCase):
-    """ Class for Integration test of the fixtures """
+    """ Integration test of fixtures """
 
     @classmethod
     def setUpClass(cls):
-        """ class method called before tests in an individual class that run """
+        """
+        class method called before
+        the tests in an individual class are run
+        """
         config = {
             "return_value.json.side_effect": [
                 cls.org_payload,
@@ -108,7 +119,9 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.mock = cls.get_patcher.start()
 
     def test_public_repos(self):
-        """ Integration test: for public repos """
+        """
+        Integration test: for the public repos
+        """
         test_class = GithubOrgClient("google")
 
         self.assertEqual(test_class.org, self.org_payload)
@@ -118,7 +131,10 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         self.mock.assert_called()
 
     def test_public_repos_with_license(self):
-        """ Integration test for public repos with the License """
+        """
+        Integration test for
+        the public repos with License
+        """
         test_class = GithubOrgClient("google")
 
         self.assertEqual(test_class.public_repos(), self.expected_repos)
@@ -129,7 +145,10 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """ class method called after tests in an individual class have run """
+        """
+        class method called after
+        tests in an individual class have run
+        """
         cls.get_patcher.stop()
 
 
