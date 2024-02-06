@@ -19,7 +19,10 @@ class TestGithubOrgClient(unittest.TestCase):
     )
     @patch("client.get_json")
     def test_org(self, org_name, output, mock_get_json):
-        """ test if GithubOrgClient.org returns the correct value """
+        """
+        test if GithubOrgClient.org
+        returns the correct value
+        """
         test_init = GithubOrgClient(org_name)
         mock_get_json.return_value = output
         self.assertEqual(output, test_init.org)
@@ -27,7 +30,10 @@ class TestGithubOrgClient(unittest.TestCase):
 
     @patch("client.get_json")
     def test_public_repos_url(self, mock_get_json):
-        """ test client.get_json func to check the _public_repos_url behavior """
+        """
+        test client.get_json func to
+        check the _public_repos_url behavior
+        """
         test_init = GithubOrgClient("test")
         output = {"repos_url": "www.test.com"}
         mock_get_json.return_value = output
